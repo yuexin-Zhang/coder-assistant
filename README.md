@@ -7,8 +7,8 @@
 ## 安装
 
 ```bash
-python -m venv venv
-venv\Scripts\activate
+python -m venv .venv
+source .venv/Scripts/activate
 pip install pyautogui pyperclip
 ```
 
