@@ -1,7 +1,3 @@
-# Coding Assistant
-
-Windows 平台自动化编码工具。
-
 ## 环境要求
 
 - Windows 10/11
