@@ -21,7 +21,7 @@ PAUSE_PROB = 0.03                    # 思考停顿概率
 PAUSE_DURATION = (1.0, 4.0)         # 停顿时长
 TYPO_PROB = 0.04                     # 打错字概率
 BACKSPACE_PROB = 0.02                # 退格概率
-WORK_DIR = os.path.join(os.environ.get("USERPROFILE", "C:\\Users\\Default"), "fake_coder_workspace")
+WORK_DIR = os.path.join(os.environ.get("USERPROFILE", "C:\\Users\\Default"), "coding_assistant_workspace")
 PYTHON_EXE = sys.executable
 
 pyautogui.FAILSAFE = False
@@ -583,8 +583,8 @@ def write_file_to_disk(filepath: str, content: str) -> None:
 
 def main() -> None:
     ensure_workspace()
-    print(f"[Fake Coder] 工作目录: {WORK_DIR}")
-    print("[Fake Coder] 5 秒后开始，请切换到编辑器窗口...")
+    print(f"[Coding Assistant] 工作目录: {WORK_DIR}")
+    print("[Coding Assistant] 5 秒后开始，请切换到编辑器窗口...")
     time.sleep(5)
 
     cycle = 0
@@ -692,4 +692,4 @@ if __name__ == "__main__":
     try:
         main()
     except KeyboardInterrupt:
-        print("\n[Fake Coder] 已停止")
+        print("\n[Coding Assistant] 已停止")

@@ -1,6 +1,6 @@
-# Fake Coder - 模拟编码行为脚本
+# Coding Assistant
 
-在 Windows 上模拟真实的编码工作行为，包括打字、调试、修复错误、鼠标操作等。
+Windows 平台自动化编码工具。
 
 ## 环境要求
 
@@ -18,7 +18,7 @@ pip install pyautogui pyperclip
 ### 1. 基本启动
 
 ```bash
-python fake_coder.py
+python coding_assistant.py
 ```
 
 启动后有 **5 秒缓冲时间**，切换到编辑器窗口即可。
@@ -31,7 +31,7 @@ Ctrl + C
 
 ### 3. 切换编辑器
 
-默认使用 Notepad。如果想用 VS Code，修改 `fake_coder.py` 中的 `open_in_notepad` 函数：
+默认使用 Notepad。如果想用 VS Code，修改 `coding_assistant.py` 中的 `open_in_notepad` 函数：
 
 ```python
 # 将 "notepad" 改为 "code"
@@ -105,8 +105,8 @@ TYPO_PROB = 0.04                    # 打错概率
 
 ```
 coder/
-  ├── fake_coder.py      # 主脚本
+  ├── coding_assistant.py  # 主脚本
   └── README.md          # 本文件
 ```
 
-运行时会在用户目录下自动创建 `fake_coder_workspace/` 存放临时代码文件。
+运行时会在用户目录下自动创建 `coding_assistant_workspace/` 存放临时代码文件。
