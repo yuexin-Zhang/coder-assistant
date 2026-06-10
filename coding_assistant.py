@@ -553,15 +553,10 @@ def main() -> None:
 
             buggy_code = inject_errors(original_code)
 
-            write_file_to_disk(filepath, buggy_code)
+            write_file_to_disk(filepath, "")
 
             open_editor(filepath)
             focus_editor()
-
-            pyautogui.hotkey('ctrl', 'a')
-            time.sleep(0.2)
-            pyautogui.press('delete')
-            time.sleep(0.2)
 
             print(f"  [Typing] 正在输入 {filename}...")
             human_type(buggy_code)
