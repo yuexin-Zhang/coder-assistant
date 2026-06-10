@@ -1,12 +1,3 @@
-"""
-模拟真实 Coding 行为脚本 (Windows)
-- 随机选取代码模板逐字输入（含拟真打字节奏）
-- 模拟拼写错误和退格修正
-- 编译/运行后检查输出，自动定位并修复错误
-- 随机鼠标移动、滚动、点击
-- 随机休息（看文档、思考）
-"""
-
 import pyautogui
 import pyperclip
 import random
