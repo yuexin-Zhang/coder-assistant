@@ -6,12 +6,11 @@ import subprocess
 import os
 import sys
 
-# ============ 配置 ============
-TYPING_SPEED_RANGE = (0.02, 0.12)   # 单次按键间隔(秒)
-PAUSE_PROB = 0.03                    # 思考停顿概率
-PAUSE_DURATION = (1.0, 4.0)         # 停顿时长
-TYPO_PROB = 0.04                     # 打错字概率
-BACKSPACE_PROB = 0.02                # 退格概率
+TYPING_SPEED_RANGE = (0.02, 0.12)
+PAUSE_PROB = 0.03
+PAUSE_DURATION = (1.0, 4.0)
+TYPO_PROB = 0.04
+BACKSPACE_PROB = 0.02
 WORK_DIR = os.path.join(os.environ.get("USERPROFILE", "C:\\Users\\Default"), "coding_assistant_workspace")
 PYTHON_EXE = sys.executable
 
@@ -19,9 +18,7 @@ pyautogui.FAILSAFE = False
 pyautogui.PAUSE = 0
 
 
-# ============ 代码模板库 ============
 CODE_TEMPLATES = [
-    # ---------- Python 项目 ----------
     {
         "language": "python",
         "files": {
@@ -322,19 +319,14 @@ if __name__ == "__main__":
 ]
 
 
-# ============ 工具函数 ============
-
 def human_type(text: str) -> None:
-    """拟真逐字打字，包含随机速度、停顿、打错改错"""
     i = 0
     while i < len(text):
         ch = text[i]
 
-        # 概率性思考停顿
         if random.random() < PAUSE_PROB:
             time.sleep(random.uniform(*PAUSE_DURATION))
 
-        # 概率性打错一个相邻键并退格修正
         if random.random() < TYPO_PROB and ch.isalpha():
             neighbor = get_neighbor_key(ch)
             if neighbor:
@@ -343,7 +335,6 @@ def human_type(text: str) -> None:
                 pyautogui.press('backspace')
                 time.sleep(random.uniform(0.1, 0.25))
 
-        # 处理特殊字符
         if ch == '\n':
             pyautogui.press('enter')
         elif ch == '\t':
@@ -363,7 +354,6 @@ def human_type(text: str) -> None:
                     pyautogui.hotkey('ctrl', 'v')
 
         delay = random.uniform(*TYPING_SPEED_RANGE)
-        # 大括号/复杂符号后多停顿
         if ch in '{}()[]':
             delay *= random.uniform(1.5, 3.0)
         time.sleep(delay)
@@ -371,7 +361,6 @@ def human_type(text: str) -> None:
 
 
 def get_neighbor_key(ch: str) -> str | None:
-    """获取键盘上相邻的键（模拟打错）"""
     neighbors = {
         'a': 'sq', 'b': 'vn', 'c': 'xv', 'd': 'sf', 'e': 'wr',
         'f': 'dg', 'g': 'fh', 'h': 'gj', 'i': 'uo', 'j': 'hk',
@@ -386,7 +375,6 @@ def get_neighbor_key(ch: str) -> str | None:
 
 
 def random_mouse_move() -> None:
-    """随机鼠标微移"""
     x, y = pyautogui.position()
     dx = random.randint(-100, 100)
     dy = random.randint(-50, 50)
@@ -398,14 +386,12 @@ def random_mouse_move() -> None:
 
 
 def random_scroll() -> None:
-    """随机滚动"""
     amount = random.choice([-3, -2, -1, 1, 2, 3])
     pyautogui.scroll(amount)
     time.sleep(random.uniform(0.3, 0.8))
 
 
 def take_break() -> None:
-    """随机休息（模拟阅读/思考）"""
     action = random.choice(["scroll", "mouse", "pause", "pause"])
     if action == "scroll":
         for _ in range(random.randint(2, 5)):
@@ -418,33 +404,28 @@ def take_break() -> None:
         time.sleep(random.uniform(3.0, 15.0))
 
 
-def open_in_notepad(filepath: str) -> None:
-    """用 notepad 打开文件"""
-    subprocess.Popen(["notepad", filepath])
-    time.sleep(1.5)
+def open_editor(filepath: str) -> None:
+    subprocess.Popen(["code", filepath])
+    time.sleep(2.0)
 
 
 def save_file() -> None:
-    """模拟 Ctrl+S 保存"""
     pyautogui.hotkey('ctrl', 's')
     time.sleep(0.5)
 
 
-def close_notepad() -> None:
-    """关闭 notepad"""
-    pyautogui.hotkey('alt', 'f4')
+def close_editor() -> None:
+    pyautogui.hotkey('ctrl', 'w')
     time.sleep(0.8)
 
 
 def focus_editor() -> None:
-    """点击编辑器窗口使其获得焦点"""
     time.sleep(0.5)
     pyautogui.click(960, 540)
     time.sleep(0.3)
 
 
 def run_command(cmd: list[str], cwd: str) -> tuple[int, str, str]:
-    """运行命令并返回 (returncode, stdout, stderr)"""
     try:
         result = subprocess.run(
             cmd, capture_output=True, text=True, timeout=30, cwd=cwd
@@ -454,10 +435,7 @@ def run_command(cmd: list[str], cwd: str) -> tuple[int, str, str]:
         return -1, "", str(e)
 
 
-# ============ 错误注入 & 修复 ============
-
 def inject_errors(code: str) -> str:
-    """在代码中注入一些常见错误，以便后续'发现并修复'"""
     lines = code.split('\n')
     errors_injected = 0
     max_errors = random.randint(1, 3)
@@ -474,13 +452,11 @@ def inject_errors(code: str) -> str:
             break
         line = lines[idx]
 
-        # 缺少冒号
         if line.strip().endswith(':') and random.random() < 0.4:
             lines[idx] = line.rstrip()[:-1]
             errors_injected += 1
             continue
 
-        # 拼写错误
         if 'self.' in line and random.random() < 0.3:
             import re
             match = re.search(r'self\.(\w+)', line)
@@ -494,7 +470,6 @@ def inject_errors(code: str) -> str:
                     errors_injected += 1
                     continue
 
-        # 缩进错误
         if line.startswith('    ') and random.random() < 0.2:
             spaces = len(line) - len(line.lstrip())
             lines[idx] = ' ' * (spaces + 4) + line.lstrip()
@@ -504,7 +479,6 @@ def inject_errors(code: str) -> str:
 
 
 def analyze_errors(stderr: str, filename: str) -> list[dict]:
-    """解析 Python 错误输出"""
     errors = []
     for line in stderr.split('\n'):
         line = line.strip()
@@ -523,31 +497,25 @@ def analyze_errors(stderr: str, filename: str) -> list[dict]:
 
 
 def show_fix_process(errors: list[dict], code_lines: list[str]) -> list[str]:
-    """模拟在编辑器中定位错误、查看、修复的过程"""
     for err in sorted(errors, key=lambda x: x["line"]):
         line_no = err["line"]
 
-        # Ctrl+G 跳转到错误行
         pyautogui.hotkey('ctrl', 'g')
         time.sleep(0.3)
         pyautogui.write(str(line_no), interval=0.05)
         pyautogui.press('enter')
         time.sleep(0.5)
 
-        # 滚动查看上下文
         random_scroll()
         time.sleep(random.uniform(0.5, 1.5))
 
-        # 模拟阅读/思考
         time.sleep(random.uniform(2.0, 5.0))
 
-        # 选中当前行
         pyautogui.hotkey('home')
         time.sleep(0.1)
         pyautogui.hotkey('shift', 'end')
         time.sleep(0.2)
 
-        # 修复：用正确内容替换
         if line_no <= len(code_lines):
             fixed_line = code_lines[line_no - 1]
             pyperclip.copy(fixed_line)
@@ -559,15 +527,11 @@ def show_fix_process(errors: list[dict], code_lines: list[str]) -> list[str]:
     return code_lines
 
 
-# ============ 主流程 ============
-
 def ensure_workspace() -> None:
-    """创建工作目录"""
     os.makedirs(WORK_DIR, exist_ok=True)
 
 
 def write_file_to_disk(filepath: str, content: str) -> None:
-    """写入文件到磁盘"""
     with open(filepath, "w", encoding="utf-8") as f:
         f.write(content)
 
@@ -584,21 +548,16 @@ def main() -> None:
         template = random.choice(CODE_TEMPLATES)
         print(f"\n[Cycle {cycle}] 选择模板: {list(template['files'].keys())}")
 
-        # ---- Phase 1: 写代码 ----
         for filename, original_code in template["files"].items():
             filepath = os.path.join(WORK_DIR, filename)
 
-            # 注入错误
             buggy_code = inject_errors(original_code)
 
-            # 写入文件
             write_file_to_disk(filepath, buggy_code)
 
-            # 打开文件
-            open_in_notepad(filepath)
+            open_editor(filepath)
             focus_editor()
 
-            # 清空内容后逐字输入
             pyautogui.hotkey('ctrl', 'a')
             time.sleep(0.2)
             pyautogui.press('delete')
@@ -607,14 +566,11 @@ def main() -> None:
             print(f"  [Typing] 正在输入 {filename}...")
             human_type(buggy_code)
 
-            # 保存
             save_file()
             print(f"  [Saved] {filename} 已保存")
 
-            # 随机休息
             take_break()
 
-            # ---- Phase 2: 运行 / 检查 ----
             print(f"  [Running] 执行 {filename}...")
             returncode, stdout, stderr = run_command(
                 template["run_cmd"](filename), WORK_DIR
@@ -633,11 +589,9 @@ def main() -> None:
                     save_file()
                     time.sleep(0.5)
 
-                    # 写入修正后的代码
                     write_file_to_disk(filepath, original_code)
                     print(f"  [Fixed] {filename} 已修复")
 
-                    # 重新运行验证
                     time.sleep(random.uniform(1.0, 2.0))
                     rc2, out2, err2 = run_command(
                         template["run_cmd"](filename), WORK_DIR
@@ -651,11 +605,9 @@ def main() -> None:
             else:
                 print(f"  [OK] {filename} 运行正常")
 
-            # 关闭 notepad
-            close_notepad()
+            close_editor()
             time.sleep(random.uniform(0.5, 1.5))
 
-        # ---- Phase 3: 运行测试 ----
         print(f"  [Testing] 运行测试...")
         time.sleep(random.uniform(1.0, 3.0))
         try:
@@ -668,7 +620,6 @@ def main() -> None:
         except Exception:
             pass
 
-        # ---- Phase 4: 随机活动 ----
         print(f"  [Break] 休息一会儿...")
         for _ in range(random.randint(2, 6)):
             random_mouse_move()
